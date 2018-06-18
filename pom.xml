@@ -14,6 +14,10 @@
 		<mule.version>3.9.0</mule.version>
     	<mule.tools.version>1.2</mule.tools.version>
         <cloudhub.domain>mule-project-a.cloudhub.io</cloudhub.domain>
+        <cloudhub.username>guigacerq</cloudhub.username>
+        <cloudhub.password>A123456a</cloudhub.password>
+        <cloudhub.env>Sandbox</cloudhub.env>
+        <cloudhub.appName>mule-project-a</cloudhub.appName>
 	<munit.version>1.3.7</munit.version>
     <mule.munit.support.version>3.9.1</mule.munit.support.version>
     </properties>
@@ -64,6 +68,18 @@
                             <groupId>org.mule.modules</groupId>
                             <artifactId>azure-storage-connector</artifactId>
                         </inclusion>
+                    <inclusion>
+                            <groupId>com.mulesoft.munit.utils</groupId>
+                            <artifactId>munit-dbserver-module</artifactId>
+                        </inclusion>
+                    <inclusion>
+                            <groupId>com.mulesoft.munit.utils</groupId>
+                            <artifactId>munit-synchronize-module</artifactId>
+                        </inclusion>
+                    <inclusion>
+                            <groupId>com.mulesoft.munit.utils</groupId>
+                            <artifactId>munit-mclient-module</artifactId>
+                        </inclusion>
                     </inclusions>
                 </configuration>
 			</plugin>
@@ -78,15 +94,16 @@
         <configuration>
             <deploymentType>cloudhub</deploymentType>
             <muleVersion>3.9.0</muleVersion>
-            <username>guigacerq</username>
-            <password>A123456a</password>
-             <applicationName>mule-project-a</applicationName>
+            <username>${cloudhub.username}</username>
+            <password>${cloudhub.password}</password>
+             <applicationName>${cloudhub.appName}</applicationName>
              <!-- <businessGroup>engineering\devops</businessGroup> -->
             <target>CloudHub</target>
             <!-- One of: server, serverGroup, cluster -->
             <domain>${cloudhub.domain}</domain>
             <targetType>server</targetType>
             <environment>Sandbox</environment>
+            <workerSize>0.1vCores</workerSize>
         </configuration>
         <executions>
             <execution>
@@ -348,6 +365,21 @@
             <artifactId>munit-runner</artifactId>
             <version>${munit.version}</version>
             <scope>test</scope>
+        </dependency>
+    <dependency>
+            <groupId>com.mulesoft.munit.utils</groupId>
+            <artifactId>munit-dbserver-module</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+    <dependency>
+            <groupId>com.mulesoft.munit.utils</groupId>
+            <artifactId>munit-synchronize-module</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+    <dependency>
+            <groupId>com.mulesoft.munit.utils</groupId>
+            <artifactId>munit-mclient-module</artifactId>
+            <version>1.1.0</version>
         </dependency>
     </dependencies>
 	
