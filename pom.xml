@@ -13,8 +13,19 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<mule.version>3.9.0</mule.version>
     	<mule.tools.version>1.2</mule.tools.version>
-	</properties>
+        <cloudhub.domain>mule-project-a.cloudhub.io</cloudhub.domain>
+	<munit.version>1.3.7</munit.version>
+    <mule.munit.support.version>3.9.1</mule.munit.support.version>
+    </properties>
 
+<distributionManagement>
+       <repository>
+         <id>internal.repo</id>
+         <name>Internal repo</name>
+         <url>file:///C:\Users\ggomesco\Desktop\oi</url>
+       </repository>
+</distributionManagement>
+   
 	<build>
 		<plugins>
 			<plugin>
@@ -57,28 +68,36 @@
                 </configuration>
 			</plugin>
             <plugin>
-                <groupId>org.mule.tools.maven</groupId>
-                <artifactId>mule-maven-plugin</artifactId>
-                <version>2.0</version>
-                <configuration>
-                    <deploymentType>cloudhub</deploymentType>
-                    <!-- muleVersion is the runtime version as it appears on the CloudHub interface -->
-                    <muleVersion>3.9.1</muleVersion>
-                    <username>guigacerq</username>
-                    <password>A123456a</password>
-                    <redeploy>true</redeploy>
-                    <environment>Sandbox</environment>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+      <groupId>org.mule.tools.maven</groupId>
+      <artifactId>mule-maven-plugin</artifactId>
+      <version>2.1.1</version>
+      <!-- <configuration>
+            <deploymentType>standalone</deploymentType>
+            <muleVersion>${mule.version}</muleVersion>
+        </configuration> -->
+        <configuration>
+            <deploymentType>cloudhub</deploymentType>
+            <muleVersion>3.9.0</muleVersion>
+            <username>guigacerq</username>
+            <password>A123456a</password>
+             <applicationName>mule-project-a</applicationName>
+             <!-- <businessGroup>engineering\devops</businessGroup> -->
+            <target>CloudHub</target>
+            <!-- One of: server, serverGroup, cluster -->
+            <domain>${cloudhub.domain}</domain>
+            <targetType>server</targetType>
+            <environment>Sandbox</environment>
+        </configuration>
+        <executions>
+            <execution>
+                <id>deploy</id>
+                <phase>deploy</phase>
+                <goals>
+                    <goal>deploy</goal>
+                </goals>
+            </execution>
+        </executions>
+    </plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -106,8 +125,38 @@
 					</execution>
 				</executions>
 			</plugin>
-		</plugins>
-	</build>
+		<plugin>
+                <groupId>com.mulesoft.munit.tools</groupId>
+                <artifactId>munit-maven-plugin</artifactId>
+                <version>${munit.version}</version>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <coverage>
+                        <runCoverage>true</runCoverage>
+                        <formats>
+                            <format>html</format>
+                        </formats>
+                    </coverage>
+                </configuration>
+            </plugin>
+        </plugins>
+	<testResources>
+            <testResource>
+                <directory>src/test/munit</directory>
+            </testResource>
+        <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+    </build>
 
 	<!-- Mule Dependencies -->
 	<dependencies>
@@ -287,6 +336,18 @@
             <groupId>org.mule.modules</groupId>
             <artifactId>azure-storage-connector</artifactId>
             <version>1.1.0</version>
+        </dependency>
+    <dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>mule-munit-support</artifactId>
+            <version>${mule.munit.support.version}</version>
+            <scope>test</scope>
+        </dependency>
+    <dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>munit-runner</artifactId>
+            <version>${munit.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 	
